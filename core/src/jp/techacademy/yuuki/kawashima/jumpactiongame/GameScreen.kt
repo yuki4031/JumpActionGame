@@ -3,6 +3,7 @@ package jp.techacademy.yuuki.kawashima.jumpactiongame
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences // ←追加する
 import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont // ←追加する
@@ -38,6 +39,8 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
     private val mViewPort: FitViewport
     private val mGuiViewPort: FitViewport
 
+    private val mSound: Sound
+
     private var mRandom: Random
     private var mSteps: ArrayList<Step>
     private var mStars: ArrayList<Star>
@@ -54,6 +57,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
     private var mHighScore: Int // ←追加する
     private var mPrefs: Preferences // ←追加する
 
+
     init {
         // 背景の準備
         val bgTexture = Texture("back.png")
@@ -66,6 +70,8 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         mCamera = OrthographicCamera()
         mCamera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
         mViewPort = FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, mCamera)
+
+        mSound = Gdx.audio.newSound(Gdx.files.internal("mysound.mp3"))
 
         // GUI用のカメラを設定する
         mGuiCamera = OrthographicCamera()
@@ -181,9 +187,9 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
                 mStars.add(star)
             }
 
-            if (mRandom.nextFloat() > 0.7f) {
+            if (mRandom.nextFloat() > 0.8f) {
                 val enemy = Enemy(enemyTexture, 0, 0, 72, 72)
-                enemy.setPosition(step.x + mRandom.nextFloat()*3, step.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat() * 5)
+                enemy.setPosition(step.x + mRandom.nextFloat(), step.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat()*3)
                 mEnemys.add(enemy)
             }
 
@@ -271,6 +277,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
                 continue
             }
             if (mPlayer.boundingRectangle.overlaps(enemy.boundingRectangle)) {
+                mSound.play(1.0f)
                 mGameState = GAME_STATE_GAMEOVER
                 return
             }

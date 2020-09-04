@@ -167,7 +167,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         val starTexture = Texture("star.png")
         val playerTexture = Texture("uma.png")
         val ufoTexture = Texture("ufo.png")
-        val enemyTexture = Texture("enemy.png")
+        val enemyTexture = Texture("enemy1.png")
 
         // StepとStarをゴールの高さまで配置していく
         var y = 0f
